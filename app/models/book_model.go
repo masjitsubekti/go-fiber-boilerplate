@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/gofrs/uuid"
 )
 
 // Book struct to describe book object.

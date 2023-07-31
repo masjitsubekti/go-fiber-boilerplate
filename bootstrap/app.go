@@ -18,12 +18,14 @@ func Boot() {
 	app := fiber.New(config)
 
 	// Middlewares.
-	middleware.FiberMiddleware(app) // Register Fiber's middleware for app.
+	middleware.FiberMiddleware(app)
+
+	// Dependencies Injection
+	injection := routes.CallDependenciesInjection()
 
 	// Routes.
-	routes.SwaggerRoute(app)  // Register a route for API Docs (Swagger).
-	routes.PublicRoutes(app)  // Register a public routes for app.
-	routes.NotFoundRoute(app) // Register route for 404 Error.
+	routes.SetupRoutes(app, injection)
+	routes.NotFoundRoute(app)
 
 	// Start server (with or without graceful shutdown).
 	if os.Getenv("STAGE_STATUS") == "dev" {
