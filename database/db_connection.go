@@ -12,8 +12,18 @@ type DBConn struct {
 	Gorm *gorm.DB
 }
 
+func (d DBConn) Query() (db *sqlx.DB) {
+	db = d.DB
+	return
+}
+
+func (d DBConn) Orm() (db *gorm.DB) {
+	db = d.Gorm
+	return
+}
+
 // OpenDBConnection func for opening database connection.
-func CreateDBConnection() (dbConn DBConn, err error) {
+func NewDBConnection() (dbConn DBConn, err error) {
 	// Define Database connection variables.
 	var (
 		db   *sqlx.DB
