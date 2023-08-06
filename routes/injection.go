@@ -8,8 +8,9 @@ import (
 )
 
 type Injection struct {
-	AuthController controllers.AuthController
-	BookController controllers.BookController
+	AuthController   controllers.AuthController
+	BookController   controllers.BookController
+	AuthorController controllers.AuthorController
 }
 
 // Define Dependency Injection
@@ -23,9 +24,13 @@ func CallDependenciesInjection() Injection {
 	bookRepository := repository.NewBookRepository(DbConnect)
 	bookService := services.NewBookService(bookRepository)
 	bookController := controllers.NewBookController(bookService)
+	// Author
+	authorService := services.NewAuthorService(DbConnect)
+	authorController := controllers.NewAuthorController(authorService)
 
 	return Injection{
-		AuthController: authController,
-		BookController: bookController,
+		AuthController:   authController,
+		BookController:   bookController,
+		AuthorController: authorController,
 	}
 }

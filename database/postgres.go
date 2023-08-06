@@ -10,7 +10,6 @@ import (
 	"github.com/create-go-app/fiber-go-template/pkg/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 
 	"github.com/jmoiron/sqlx"
 
@@ -61,7 +60,7 @@ func GormPostgreSQLConnection() (*gorm.DB, error) {
 	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		// Logger: logger.Default.LogMode(logger.Info),
 	})
 
 	// Try to ping database.

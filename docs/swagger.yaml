@@ -1,5 +1,32 @@
 basePath: /api
 definitions:
+  models.Author:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.AuthorRequest:
+    properties:
+      address:
+        type: string
+      id:
+        type: string
+      name:
+        maxLength: 255
+        type: string
+    required:
+    - name
+    type: object
   models.Book:
     properties:
       author:
@@ -81,6 +108,120 @@ info:
   title: Go Fiber Boilerplate
   version: "1.0"
 paths:
+  /v1/author:
+    post:
+      consumes:
+      - application/json
+      description: Create a new book.
+      parameters:
+      - description: Author
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Author'
+      security:
+      - ApiKeyAuth: []
+      summary: create a new book
+      tags:
+      - Author
+  /v1/author/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete book by given ID.
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: delete book by given ID
+      tags:
+      - Author
+    get:
+      consumes:
+      - application/json
+      description: Get book by given ID.
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Author'
+      summary: get book by given ID
+      tags:
+      - Author
+    put:
+      consumes:
+      - application/json
+      description: Update book.
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Author
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthorRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: update book
+      tags:
+      - Author
+  /v1/authors:
+    get:
+      consumes:
+      - application/json
+      description: Get all exists authors.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Author'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: get all exists authors
+      tags:
+      - Author
   /v1/book:
     delete:
       consumes:
@@ -234,6 +375,8 @@ paths:
             items:
               $ref: '#/definitions/models.Book'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: get all exists books
       tags:
       - Books

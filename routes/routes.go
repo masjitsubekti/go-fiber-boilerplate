@@ -6,25 +6,33 @@ import (
 	swagger "github.com/gofiber/swagger"
 )
 
-func SetupRoutes(a *fiber.App, injection Injection) {
+func SetupRoutes(a *fiber.App, c Injection) {
 	SwaggerRoute(a)
 	// Create routes group.
 	route := a.Group("/api/v1")
 
 	// AUTH
-	userController := injection.AuthController
+	userController := c.AuthController
 	route.Post("/user/sign/up", userController.UserSignUp)
 	route.Post("/user/sign/in", userController.UserSignIn)
 	route.Post("/user/sign/out", middleware.JWTProtected(), userController.UserSignOut)
 	route.Post("/token/renew", middleware.JWTProtected(), userController.RenewTokens)
 
 	// BOOK
-	bookController := injection.BookController
-	route.Get("/books", bookController.GetBooks)
+	bookController := c.BookController
+	route.Get("/books", middleware.JWTProtected(), bookController.GetBooks)
 	route.Get("/book/:id", bookController.GetBook)
 	route.Post("/book", middleware.JWTProtected(), bookController.CreateBook)
 	route.Put("/book", middleware.JWTProtected(), bookController.UpdateBook)
 	route.Delete("/book", middleware.JWTProtected(), bookController.DeleteBook)
+
+	// BOOK
+	authorController := c.AuthorController
+	route.Get("/authors", middleware.JWTProtected(), authorController.GetAll)
+	route.Get("/author/:id", authorController.FindByID)
+	route.Post("/author", middleware.JWTProtected(), authorController.Create)
+	route.Put("/author/:id", middleware.JWTProtected(), authorController.Update)
+	route.Delete("/author/:id", middleware.JWTProtected(), authorController.Delete)
 }
 
 func SwaggerRoute(a *fiber.App) {

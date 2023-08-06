@@ -28,6 +28,7 @@ func NewBookController(service services.BookService) BookController {
 // @Accept json
 // @Produce json
 // @Success 200 {array} models.Book
+// @Security ApiKeyAuth
 // @Router /v1/books [get]
 func (h *BookController) GetBooks(c *fiber.Ctx) error {
 	// Get all books.
